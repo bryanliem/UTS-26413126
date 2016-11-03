@@ -1,10 +1,5 @@
-a. curl -o API_SI.POV.GINI_DS2_en_csv_v2.zip http://api.worldbank.org/v2/en/indicator/SI.POV.GINI?downloadformat=csv
-b. unzip API_SI.POV.GINI_DS2_en_csv_v2.zip
-c.
 import re
 import math
-import json
-import urllib
 f = open('API_SI.POV.GINI_DS2_en_csv_v2.csv', 'r')
 #f = open('koferry.txt', 'r')
 
@@ -22,25 +17,35 @@ for line in f:
     variable = re.sub('(^["a-zA-z\s"]+,)','',variable)
     variable = re.sub('(^["a-zA-z\s()]+),(["A-Z\.]+),','',variable)
     
-    searchObj = re.search('(["\d.]+)', variable)
+
 
     jumlahData =0
-    
-    for (obj) in re.findall('(["\d.]+)', variable):
-        onlyNumber = re.sub('"','',obj)
-        
-        #if onlyNumber is not "." and not "":
-        #    cek = int(float(onlyNumber));
-        #    cek = str(cek)
-        
-        #if cek.isdigit():
-            #jumlahData+=1
+    min =10000000.000
+    max =0.0
+    rata2 =0.0
+    for (obj) in re.findall('([\d.]+)', variable):
         
         
+        if obj is not "." and not "":
+            cek = int(float(obj));
+            cek = str(cek)
         
-            
-    output+= str(jumlahData) +" " 
-    
+        if cek.isdigit():
+            if obj is not "." and not "":
+                datafloat = float(obj)
+                jumlahData+=1
+                if datafloat < min:
+                    min = datafloat
+                if datafloat > max:
+                    max = datafloat
+                
+                rata2 += float(obj)
+        
+    if jumlahData >0:
+        rata2 /= jumlahData
+        output+= ' '+str(jumlahData) +" " +str(rata2)+" "+str(max)+" "+str(min)
+    else:
+        output+= ' '+str(jumlahData)
     
     
     output+="\n"
@@ -49,16 +54,3 @@ for line in f:
 print output
     
 print i
-rata=[]
-
-for x in range (1,12):
-  urllib.urlretrieve('http://api.worldbank.org/v2/en/indicator/SI.POV.GINI?downloadformat=csv')
-  from pprint import pprint
-  with open('.json') as data_file:
-        data=json.load(data_file)
-  for temp in data['data']:
-             if temp['average'] is not None:
-                rata.append(int(temp['average']))
-                print temp['average']
-
-print "Average : ",(sum(rata)/len(rata))
