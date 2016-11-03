@@ -1,0 +1,49 @@
+a. curl -o API_SI.POV.GINI_DS2_en_csv_v2.zip http://api.worldbank.org/v2/en/indicator/SI.POV.GINI?downloadformat=csv
+b. unzip API_SI.POV.GINI_DS2_en_csv_v2.zip
+c.
+import re
+import math
+f = open('API_SI.POV.GINI_DS2_en_csv_v2.csv', 'r')
+#f = open('koferry.txt', 'r')
+
+i = 0;
+output=""
+for line in f:
+    i+=1
+    variable = re.sub('(^["a-zA-z\s"]+,)','',line)
+    searchObj = re.search('(^["a-zA-z\s"]+,)', variable)
+
+    if searchObj:
+       output+= re.sub('[",]','',searchObj.group())
+    
+    
+    variable = re.sub('(^["a-zA-z\s"]+,)','',variable)
+    variable = re.sub('(^["a-zA-z\s()]+),(["A-Z\.]+),','',variable)
+    
+    searchObj = re.search('(["\d.]+)', variable)
+
+    jumlahData =0
+    
+    for (obj) in re.findall('(["\d.]+)', variable):
+        onlyNumber = re.sub('"','',obj)
+        
+        #if onlyNumber is not "." and not "":
+        #    cek = int(float(onlyNumber));
+        #    cek = str(cek)
+        
+        #if cek.isdigit():
+            #jumlahData+=1
+        
+        
+        
+            
+    output+= str(jumlahData) +" " 
+    
+    
+    
+    output+="\n"
+    
+    
+print output
+    
+print i
